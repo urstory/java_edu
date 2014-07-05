@@ -4,3 +4,5 @@ Simple FW
 스프링에서 제공하는 동명의 클래스와 어노테이션인 DispatcherServlet, RequestMapping, Controller 를 만들어 MVC Model2 아키텍처를 따르는 간단 FW을 만들었다.
 
 본 소스는 교육을 위하여 만든 예제로 출처만 밝힌다면 어디에서든 사용할 수 있다.
+
+* eclipse 프로젝트이다. 이클립스와 관련된 설정파일은 eclipse_project_config 에 넣어 두었으며, 설정파일들은 .gitignore에 저장하였다. workspace경로등이 다를 수 있기 때문에 이 부분은 ignore시켜놓고 별도로 저장해 놓음으로써 이클립스에서 프로젝트를 가지고 올 때 문제점이 없도록 한다. 
