@@ -1,0 +1,33 @@
+oracle xe에서 java00 사용자 생성.
+
+system 관지라 암호는 manager일 경우
+
+create user 만들고싶은사용자계정 identified by 암호;
+
+grant 권한들 to 사용자계정;
+
+
+아래와 같이 실행함으로써 사용자 계정을 만든다.
+
+C:\Windows\system32>sqlplus system/manager
+
+SQL*Plus: Release 10.2.0.1.0 - Production on 일 7월 6 14:50:56 2014
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+
+다음에 접속됨:
+Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production
+
+SQL> create user java00 identified by java00
+  2  ;
+
+사용자가 생성되었습니다.
+
+SQL> grant connect, resource, create view to java00;
+
+권한이 부여되었습니다.
+
+SQL> quit
+Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production에서 분리되었습니다.
+
