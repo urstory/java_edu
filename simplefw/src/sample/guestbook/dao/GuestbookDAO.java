@@ -25,18 +25,24 @@ public class GuestbookDAO extends SimpleDAO<GuestbookDTO, ParamDTO>{
 		return dto;
 	}
 	
-	public GuestbookDTO update(GuestbookDTO guestbook){
+	public int update(GuestbookDTO guestbook){
 		String sql = "update guestbook where name = #name#, password = #password#, content = #content# where id = #id#";
-		guestbook = super.update(sql, guestbook);
-		return guestbook;
+		int count = super.update(sql, guestbook);
+		return count;
 	}
 	
-	public int deleteGuestbook(int id){
-		ParamDTO param = new ParamDTO();
-		param.setId(id);
+	public int delete(int id){
+		GuestbookDTO guestbook = new GuestbookDTO();
+		guestbook.setId(id);
 		
 		String sql = "delete from guestbook where id = #id#";
-		int count = delete(sql, param);
+		int count = super.update(sql, guestbook);
+		return count;
+	}
+	
+	public int insert(GuestbookDTO guestbook){
+		String sql = "insert into guestbook(id, name, password, content, ip, regdate) values (guestbook_seq.NEXTVAL, #name#, #password#, #content#, #ip#, sysdate)";
+		int count = super.update(sql, guestbook);
 		return count;
 	}
 	
@@ -57,5 +63,21 @@ public class GuestbookDAO extends SimpleDAO<GuestbookDTO, ParamDTO>{
 			return true;
 		else 
 			return false;
+	}
+	
+	public static void main(String args[]) {
+		GuestbookDAO dao = new GuestbookDAO();
+		int flag = 2;
+		if(flag  == 1){
+			GuestbookDTO guestbook = new GuestbookDTO();
+			guestbook.setName("kim");
+			guestbook.setPassword("1234");
+			guestbook.setContent("helllo");
+			guestbook.setIp("127.0.0.1");
+			dao.insert(guestbook);
+		}else if(flag == 2){
+			int count = dao.delete(2);
+			System.out.println(count);
+		}
 	}
 }
