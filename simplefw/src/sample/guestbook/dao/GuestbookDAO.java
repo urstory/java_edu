@@ -8,6 +8,8 @@ import sample.guestbook.dto.ParamDTO;
 import fw.dao.SimpleDAO;
 
 public class GuestbookDAO extends SimpleDAO<GuestbookDTO, ParamDTO>{
+	public static int LIMIT = 3;
+	
 	public List<GuestbookDTO> getList(int start, int end){
 		ParamDTO param = new ParamDTO();
 		param.setStart(start);

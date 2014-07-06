@@ -85,9 +85,15 @@ public class DispatcherServlet extends HttpServlet {
 		String path = request.getRequestURI().substring(
 				request.getContextPath().length());
 		
-		if(path.startsWith(resourceDir) || path.startsWith("/WEB-INF/")){
+		if(path.startsWith(resourceDir)){
 			RequestDispatcher rd = request.getServletContext().getNamedDispatcher("default");
 			rd.forward(new DefaultRequestWrapper(request), response);
+			return;
+		}
+		
+		if(path.startsWith("/WEB-INF") && path.indexOf(".jsp") > 0){
+			RequestDispatcher rd = request.getServletContext().getNamedDispatcher("jsp");
+			rd.forward(request, response);			
 			return;
 		}
 		
@@ -117,9 +123,6 @@ public class DispatcherServlet extends HttpServlet {
 			ex.printStackTrace();
 		}
 		
-		if(ci.getMimeType() != null)
-			response.setContentType(ci.getMimeType());
-		
 		try{
 			if(result != null){
 				if(result.indexOf("redirect:") == 0){
@@ -128,6 +131,9 @@ public class DispatcherServlet extends HttpServlet {
 					RequestDispatcher dispatcher = request.getRequestDispatcher(result);
 					dispatcher.forward(request, response);
 				}
+			}else{
+				if(ci.getMimeType() != null)
+					response.setContentType(ci.getMimeType());
 			}
 		}catch(Exception ex){
 			System.out.println("redirect, forward를 시도하다 오류 발생 : " + ci);
