@@ -1,5 +1,6 @@
 package sample.guestbook.dao;
 
+import java.sql.Date;
 import java.util.List;
 
 import sample.guestbook.dto.GuestbookDTO;
@@ -8,11 +9,14 @@ import fw.dao.SimpleDAO;
 
 public class GuestbookDAO extends SimpleDAO<GuestbookDTO, ParamDTO>{
 	public List<GuestbookDTO> getList(int start, int end){
-		
 		ParamDTO param = new ParamDTO();
+		param.setStart(start);
+		param.setEnd(end);
+		
 		String sql = "select id, name, password, content, ip, regdate from ( select rownum r, id, name, password, content, ip, regdate  from ("
-				+ "select id, name, password, content, ip, regdate from guestbook regdate desc )) where r >= #start# and r <= #end#";
-		List<GuestbookDTO> list = select(sql, param);
+				+ "select id, name, password, content, ip, regdate from guestbook order by regdate desc )) where r >= #start# and r <= #end#";
+		List<GuestbookDTO> list = select(sql, new Class[]{Integer.TYPE, String.class, String.class, String.class, String.class, Date.class },
+				new String[]{"#id#", "#name#", "#password#", "#content#", "#ip#", "#regdate#"}, param);
 		return list;
 	}
 	
@@ -20,8 +24,9 @@ public class GuestbookDAO extends SimpleDAO<GuestbookDTO, ParamDTO>{
 		
 		ParamDTO param = new ParamDTO();
 		param.setId(id);
-		String sql = "select id, name, password, content, ip, regdate from guestbook where id = #value#";
-		GuestbookDTO dto = selectOne(sql, param);
+		String sql = "select id, name, password, content, ip, regdate from guestbook where id = #id#";
+		GuestbookDTO dto = selectOne(sql, new Class[]{Integer.TYPE, String.class, String.class, String.class, String.class, Date.class },
+				new String[]{"#id#", "#name#", "#password#", "#content#", "#ip#", "#regdate#"}, param);
 		return dto;
 	}
 	
@@ -67,7 +72,7 @@ public class GuestbookDAO extends SimpleDAO<GuestbookDTO, ParamDTO>{
 	
 	public static void main(String args[]) {
 		GuestbookDAO dao = new GuestbookDAO();
-		int flag = 2;
+		int flag = 5;
 		if(flag  == 1){
 			GuestbookDTO guestbook = new GuestbookDTO();
 			guestbook.setName("kim");
@@ -78,6 +83,17 @@ public class GuestbookDAO extends SimpleDAO<GuestbookDTO, ParamDTO>{
 		}else if(flag == 2){
 			int count = dao.delete(2);
 			System.out.println(count);
+		}else if(flag == 3){
+			int count = dao.getGuestbookCount();
+			System.out.println(count);
+		}else if(flag == 4){
+			GuestbookDTO dto = dao.get(4);
+			System.out.println(dto);
+		}else if(flag == 5){
+			List<GuestbookDTO> list = dao.getList(10, 12);
+			for (GuestbookDTO guestbookDTO : list) {
+				System.out.println(guestbookDTO);
+			}
 		}
 	}
 }
